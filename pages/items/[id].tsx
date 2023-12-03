@@ -52,9 +52,9 @@ const ItemDetail: NextPage = ()=>{
         <div className=" mt-6 grid grid-cols-2 gap-4">
           {[1, 2, 3, 4, 5, 6].map((_, i) => (
             <div key={i}>
-              <div />
-              <h3>Galaxy S60</h3>
-              <p>$6</p>
+              <div className="h-56 w-full mb-4 bg-slate-300"  />
+              <h3 className="text-gray-700 -mb-1">Galaxy S60</h3>
+              <p className="text-sm font-medium text-gray-900">$6</p>
             </div>
           ))}
         </div>
