@@ -6,7 +6,7 @@ const Live: NextPage = () => {
       {[1, 1, 1, 1, 1, 1, 1].map((_, i) => (
         <div className="pt-4  px-4" key={i}>
           <div className="w-full rounded-md shadow-sm bg-slate-300 aspect-video" />
-          <h3 className="text-gray-700 text-lg mt-2">Let&apos;s try potatos</h3>
+          <h1 className="text-gray-900 text-2xl mt-2 font-bold">Let&apos;s try potatos</h1>
         </div>
       ))}
       <button className="fixed hover:bg-orange-500 transition-colors cursor-pointer  bottom-24 right-5 shadow-xl bg-orange-400 rounded-full p-4 border-transparent text-white">
