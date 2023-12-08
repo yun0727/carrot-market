@@ -1,3 +1,4 @@
+import { error } from "console";
 import { FieldErrors, useForm } from "react-hook-form";
 
 interface LoginForm {
@@ -7,7 +8,13 @@ interface LoginForm {
 }
 
 export default function Forms() {
-  const { register, handleSubmit } = useForm<LoginForm>();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginForm>({
+    mode: "onChange",
+  });
   const onValid = (data: LoginForm) => {
     console.log("im valid bby");
   };
@@ -28,10 +35,17 @@ export default function Forms() {
         placeholder="Username"
       />
       <input
-        {...register("email", { required: "Email is required" })}
+        {...register("email", {
+          required: "Email is required",
+          validate: {
+            notGmail: (value) =>
+              !value.includes("@gmail.com") || "Gmail is not allowed",
+          },
+        })}
         type="email"
         placeholder="Email"
       />
+      {errors.email?.message}
       <input
         {...register("password", { required: "Password is required" })}
         type="password"
