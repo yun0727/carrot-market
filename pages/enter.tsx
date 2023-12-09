@@ -11,6 +11,7 @@ interface EnterForm {
 }
 
 const Enter: NextPage = () => {
+  const [submitting, setSubmitting] = useState(false);
   const { register, handleSubmit, reset } = useForm<EnterForm>();
   const [method, setMethod] = useState<"email" | "phone">("email");
   const onEmailClick = () => {
@@ -22,7 +23,16 @@ const Enter: NextPage = () => {
     setMethod("phone");
   };
   const onValid = (data: EnterForm) => {
-    console.log(data);
+    setSubmitting(true);
+    fetch("/api/users/enter", {
+      method: "POST",
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application.json",
+      },
+    }).then(() => {
+      setSubmitting(false);
+    });
   };
   return (
     <div className="mt-16 px-4">
@@ -80,7 +90,7 @@ const Enter: NextPage = () => {
           ) : null}
           {method === "email" ? <Button text={"Get login link"} /> : null}
           {method === "phone" ? (
-            <Button text={"Get one-time password"} />
+            <Button text={submitting ? "Loading" : "Get one-time password"} />
           ) : null}
         </form>
         <div className="mt-8">
