@@ -1,7 +1,7 @@
+import FloatingButton from "@components/floating-button";
+import Item from "@components/item";
+import Layout from "@components/layout";
 import type { NextPage } from "next";
-import Layout from "../components/layout";
-import FloatingButton from "../components/floating-button";
-import Item from "../components/item";
 
 const Home: NextPage = () => {
   return (
@@ -9,7 +9,7 @@ const Home: NextPage = () => {
       <div className="flex flex-col space-y-5 divide-y">
         {[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1].map((_, i) => (
           <Item
-          id={i}
+            id={i}
             key={i}
             title="iPhone 14"
             price={99}
@@ -33,7 +33,7 @@ const Home: NextPage = () => {
               d="M12 6v6m0 0v6m0-6h6m-6 0H6"
             />
           </svg>
-          </FloatingButton>
+        </FloatingButton>
       </div>
     </Layout>
   );

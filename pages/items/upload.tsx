@@ -1,9 +1,8 @@
+import Button from "@components/button";
+import Input from "@components/input";
+import Layout from "@components/layout";
+import TextArea from "@components/textarea";
 import type { NextPage } from "next";
-
-import Button from "../../components/button";
-import Input from "../../components/input";
-import Layout from "../../components/layout";
-import TextArea from "../../components/textarea";
 
 const Upload: NextPage = () => {
   return (
@@ -27,7 +26,8 @@ const Upload: NextPage = () => {
             </svg>
             <input className="hidden" type="file" />
           </label>
-        </div><Input required label="Name" name="name" type="text" />
+        </div>
+        <Input required label="Name" name="name" type="text" />
         <Input
           required
           label="Price"
@@ -35,8 +35,8 @@ const Upload: NextPage = () => {
           name="price"
           type="text"
           kind="price"
-          />
-          <TextArea name="description" label="Description" />
+        />
+        <TextArea name="description" label="Description" />
         <Button text="Upload item" />
       </form>
     </Layout>

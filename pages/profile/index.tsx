@@ -1,5 +1,5 @@
 import type { NextPage } from "next";
-import Layout from "../../components/layout";
+import Layout from "@components/layout";
 import Link from "next/link";
 
 const Profile: NextPage = () => {
@@ -15,9 +15,9 @@ const Profile: NextPage = () => {
             </Link>
           </div>
         </div>
-      
+
         <div className="mt-10 flex justify-around">
-        <Link legacyBehavior href="/profile/sold">
+          <Link legacyBehavior href="/profile/sold">
             <a className="flex flex-col items-center">
               <div className="w-14 h-14 text-white bg-orange-400 rounded-full flex items-center justify-center">
                 <svg

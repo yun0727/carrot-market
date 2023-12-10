@@ -1,7 +1,6 @@
+import Layout from "@components/layout";
+import Message from "@components/message";
 import type { NextPage } from "next";
-
-import Layout from "../../components/layout";
-import Message from "../../components/message";
 
 const ChatDetail: NextPage = () => {
   return (
@@ -21,10 +20,10 @@ const ChatDetail: NextPage = () => {
                 &rarr;
               </button>
             </div>
+          </div>
+        </form>
       </div>
-    </form>
-  </div>
-</Layout>
+    </Layout>
   );
 };
 

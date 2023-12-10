@@ -1,7 +1,7 @@
+import FloatingButton from "@components/floating-button";
+import Layout from "@components/layout";
 import type { NextPage } from "next";
 import Link from "next/link";
-import FloatingButton from "../../components/floating-button";
-import Layout from "../../components/layout";
 
 const Community: NextPage = () => {
   return (
@@ -9,9 +9,9 @@ const Community: NextPage = () => {
       <div className="space-y-4 divide-y-[2px]">
         {[1, 2, 3, 4, 5, 6].map((_, i) => (
           <Link legacyBehavior key={i} href={`/community/${i}`}>
-          <a className="flex cursor-pointer flex-col pt-4 items-start">
-            <span className="flex ml-4 items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
-              동네질문
+            <a className="flex cursor-pointer flex-col pt-4 items-start">
+              <span className="flex ml-4 items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                동네질문
               </span>
               <div className="mt-2 px-4 text-gray-700">
                 <span className="text-orange-500 font-medium">Q.</span> What is
@@ -75,7 +75,7 @@ const Community: NextPage = () => {
               d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
             ></path>
           </svg>
-          </FloatingButton>
+        </FloatingButton>
       </div>
     </Layout>
   );
