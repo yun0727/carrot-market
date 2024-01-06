@@ -37,8 +37,7 @@ async function handler(
     //   body: `Your login token is ${payload}.`,
     // });
     // console.log(message);
-  }
-  if (email) {
+  } else if (email) {
     // const mailOptions = {
     //   from: process.env.MAIL_ID,
     //   to: email,

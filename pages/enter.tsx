@@ -1,32 +1,29 @@
+import type { NextPage } from "next";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
 import Button from "@components/button";
 import Input from "@components/input";
 import useMutation from "@libs/client/useMutation";
 import { cls } from "@libs/client/utils";
-import { NextPage } from "next";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
 
 interface EnterForm {
   email?: string;
   phone?: string;
 }
-
 interface TokenForm {
   token: string;
 }
-
 interface MutationResult {
   ok: boolean;
 }
-
 const Enter: NextPage = () => {
   const [enter, { loading, data, error }] =
     useMutation<MutationResult>("/api/users/enter");
   const [confirmToken, { loading: tokenLoading, data: tokenData }] =
     useMutation<MutationResult>("/api/users/confirm");
   const { register, handleSubmit, reset } = useForm<EnterForm>();
-  const { register: toeknRegister, handleSubmit: tokenhandleSubmit } =
+  const { register: tokenRegister, handleSubmit: tokenHandleSubmit } =
     useForm<TokenForm>();
   const [method, setMethod] = useState<"email" | "phone">("email");
   const onEmailClick = () => {
@@ -57,11 +54,13 @@ const Enter: NextPage = () => {
       <div className="mt-12">
         {data?.ok ? (
           <form
-            onSubmit={tokenhandleSubmit(onTokenValid)}
+            onSubmit={tokenHandleSubmit(onTokenValid)}
             className="flex flex-col mt-8 space-y-4"
           >
             <Input
-              register={toeknRegister("token", { required: true })}
+              register={tokenRegister("token", {
+                required: true,
+              })}
               name="token"
               label="Confirmation Token"
               type="number"
@@ -75,12 +74,12 @@ const Enter: NextPage = () => {
               <h5 className="text-sm text-gray-500 font-medium">
                 Enter using:
               </h5>
-              <div className="grid border-b w-full mt-8 grid-cols-2">
+              <div className="grid border-b  w-full mt-8 grid-cols-2 ">
                 <button
                   className={cls(
                     "pb-4 font-medium text-sm border-b-2",
                     method === "email"
-                      ? "border-orange-500 text-orange-400"
+                      ? " border-orange-500 text-orange-400"
                       : "border-transparent hover:text-gray-400 text-gray-500"
                   )}
                   onClick={onEmailClick}
@@ -91,7 +90,7 @@ const Enter: NextPage = () => {
                   className={cls(
                     "pb-4 font-medium text-sm border-b-2",
                     method === "phone"
-                      ? "border-orange-500 text-orange-400"
+                      ? " border-orange-500 text-orange-400"
                       : "border-transparent hover:text-gray-400 text-gray-500"
                   )}
                   onClick={onPhoneClick}
@@ -115,7 +114,6 @@ const Enter: NextPage = () => {
                   required
                 />
               ) : null}
-
               {method === "phone" ? (
                 <Input
                   register={register("phone")}
@@ -175,5 +173,4 @@ const Enter: NextPage = () => {
     </div>
   );
 };
-
 export default Enter;
