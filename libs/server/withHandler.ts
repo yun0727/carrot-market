@@ -1,6 +1,4 @@
-import { error } from "console";
 import { NextApiRequest, NextApiResponse } from "next";
-
 export interface ResponseType {
   ok: boolean;
   [key: string]: any;
@@ -8,15 +6,15 @@ export interface ResponseType {
 
 interface ConfigType {
   method: "GET" | "POST" | "DELETE";
-  handler: (req:NextApiRequest, res: NextApiResponse)=> void;
-  isPrivate?: boolean
+  handler: (req: NextApiRequest, res: NextApiResponse) => void;
+  isPrivate?: boolean;
 }
 
 export default function withHandler({
   method,
-  isPrivate=true,
-  handler,}
-:ConfigType) {
+  isPrivate = true,
+  handler,
+}: ConfigType) {
   return async function (
     req: NextApiRequest,
     res: NextApiResponse
@@ -25,7 +23,7 @@ export default function withHandler({
       return res.status(405).end();
     }
     if (isPrivate && !req.session.user) {
-      return res.status(401).json({ok: false, error: "Plz log in."})
+      return res.status(401).json({ ok: false, error: "Plz log in." });
     }
     try {
       await handler(req, res);
