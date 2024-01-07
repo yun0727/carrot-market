@@ -7,7 +7,7 @@ async function handler(
   req:NextApiRequest, 
   res:NextApiResponse<ResponseType>
   ) {
-    const {query:{id}, session:{user}}=req;
+    const {query:{id}, session:{user},}=req;
     const product = await client.product.findUnique({
       where:{
         id: +id.toString(),
