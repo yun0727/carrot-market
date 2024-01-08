@@ -1,19 +1,17 @@
+import type { NextPage } from "next";
 import Layout from "@components/layout";
 import TextArea from "@components/textarea";
+import { useRouter } from "next/router";
+import useSWR from "swr";
+import { Answer, Post, User } from "@prisma/client";
+import Link from "next/link";
 import useMutation from "@libs/client/useMutation";
 import { cls } from "@libs/client/utils";
-import { Answer, Post, User } from "@prisma/client";
-import type { NextPage } from "next";
-import Link from "next/link";
-import { useRouter } from "next/router";
-import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import useSWR from "swr";
-
+import { useEffect } from "react";
 interface AnswerWithUser extends Answer {
   user: User;
 }
-
 interface PostWithUser extends Post {
   user: User;
   _count: {
@@ -22,29 +20,27 @@ interface PostWithUser extends Post {
   };
   answers: AnswerWithUser[];
 }
-
 interface CommunityPostResponse {
   ok: boolean;
   post: PostWithUser;
   isWondering: boolean;
 }
-
 interface AnswerForm {
   answer: string;
 }
-
 interface AnswerResponse {
   ok: boolean;
   response: Answer;
 }
-
 const CommunityPostDetail: NextPage = () => {
   const router = useRouter();
   const { register, handleSubmit, reset } = useForm<AnswerForm>();
   const { data, mutate } = useSWR<CommunityPostResponse>(
     router.query.id ? `/api/posts/${router.query.id}` : null
   );
-  const [wonder, loading] = useMutation(`/api/posts/${router.query.id}/wonder`);
+  const [wonder, { loading }] = useMutation(
+    `/api/posts/${router.query.id}/wonder`
+  );
   const [sendAnswer, { data: answerData, loading: answerLoading }] =
     useMutation<AnswerResponse>(`/api/posts/${router.query.id}/answers`);
   const onWonderClick = () => {
@@ -76,8 +72,9 @@ const CommunityPostDetail: NextPage = () => {
   useEffect(() => {
     if (answerData && answerData.ok) {
       reset();
+      mutate();
     }
-  }, [answerData, reset]);
+  }, [answerData, reset, mutate]);
   return (
     <Layout canGoBack>
       <div>
@@ -87,7 +84,7 @@ const CommunityPostDetail: NextPage = () => {
         <div className="flex mb-3 px-4 cursor-pointer pb-3  border-b items-center space-x-3">
           <div className="w-10 h-10 rounded-full bg-slate-300" />
           <div>
-            <p className="textsm font-medium text-gray-700">
+            <p className="text-sm font-medium text-gray-700">
               {data?.post?.user?.name}
             </p>
             <Link
@@ -127,7 +124,7 @@ const CommunityPostDetail: NextPage = () => {
                   d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
                 ></path>
               </svg>
-              <span>궁금해요 {data?.post._count.wondering}</span>
+              <span>궁금해요 {data?.post?._count?.wondering}</span>
             </button>
             <span className="flex space-x-2 items-center text-sm">
               <svg
@@ -156,10 +153,10 @@ const CommunityPostDetail: NextPage = () => {
                 <span className="text-sm block font-medium text-gray-700">
                   {answer.user.name}
                 </span>
-                <span className="text-xs text-gray-500 block">
-                  {answer.createdAt}
+                <span className="text-xs text-gray-500 block ">
+                  {String(answer.createdAt)}
                 </span>
-                <p className="text-gray-700 mt-2"> {answer.answer}</p>
+                <p className="text-gray-700 mt-2">{answer.answer} </p>
               </div>
             </div>
           ))}
@@ -172,12 +169,11 @@ const CommunityPostDetail: NextPage = () => {
             register={register("answer", { required: true, minLength: 5 })}
           />
           <button className="mt-2 w-full bg-orange-500 hover:bg-orange-600 text-white py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 focus:outline-none ">
-            {answerLoading ? "Loading" : "Reply"}
+            {answerLoading ? "Loading..." : "Reply"}
           </button>
         </form>
       </div>
     </Layout>
   );
 };
-
 export default CommunityPostDetail;
