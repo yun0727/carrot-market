@@ -7,7 +7,7 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import useSWR from "swr";
 
-interface ProductWithCount extends Product {
+export interface ProductWithCount extends Product {
   _count: {
     favs: number;
   };
