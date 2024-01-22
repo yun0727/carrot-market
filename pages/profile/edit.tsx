@@ -44,9 +44,14 @@ const EditProfile: NextPage = () => {
         message: "Email OR Phone number are required. You neet to choose one",
       });
     }
-    if (avatar && avatar.length > 0) {
-      const cloudflareRequest = await (await fetch(`/api/files`)).json();
-      console.log(cloudflareRequest);
+    if (avatar && avatar.length > 0 && user) {
+      const { id, uploadURL } = await (await fetch(`/api/files`)).json();
+      const form = new FormData();
+      form.append("file", avatar[0], user?.id + "");
+      await fetch(uploadURL, {
+        method: "POST",
+        body: form,
+      });
       //upload file to CF URL
       return;
     } else {
