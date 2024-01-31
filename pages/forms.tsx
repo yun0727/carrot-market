@@ -1,4 +1,3 @@
-import { error } from "console";
 import { FieldErrors, useForm } from "react-hook-form";
 
 interface LoginForm {

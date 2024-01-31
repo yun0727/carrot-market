@@ -28,7 +28,7 @@ async function handler(
       answer,
     }
   });
-  console.log(newAnswer);
+  // console.log(newAnswer);
   res.json({
     ok: true,
     answer: newAnswer
