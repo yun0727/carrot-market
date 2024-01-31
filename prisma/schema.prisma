@@ -14,26 +14,29 @@ datasource db {
 }
 
 model User {
-  id              Int         @id @default(autoincrement())
-  phone           String?     @unique
-  email           String?     @unique
-  name            String
-  avatar          String?
-  createdAt       DateTime    @default(now())
-  updatedAt       DateTime    @updatedAt
-  tokens          Token[]
-  products        Product[]
-  posts           Post[]
-  answers         Answer[]
-  wonderings      Wondering[]
-  writtenReviews  Review[]    @relation(name: "writtenReviews")
-  receivedReviews Review[]    @relation(name: "receivedReviews")
-  fav             Fav[]
-  sales           Sale[]
-  purchases       Purchase[]
-  record          Record[]
-  streams         Stream[]
-  messages        Message[]
+  id               Int            @id @default(autoincrement())
+  phone            String?        @unique
+  email            String?        @unique
+  name             String
+  avatar           String?
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+  tokens           Token[]
+  products         Product[]
+  posts            Post[]
+  answers          Answer[]
+  wonderings       Wondering[]
+  writtenReviews   Review[]       @relation(name: "writtenReviews")
+  receivedReviews  Review[]       @relation(name: "receivedReviews")
+  fav              Fav[]
+  sales            Sale[]
+  purchases        Purchase[]
+  record           Record[]
+  streams          Stream[]
+  messages         Message[]
+  hostChatRooms    ChatRoom[]     @relation(name: "HostChatRoom")
+  invitedChatRooms ChatRoom[]     @relation(name: "InvitedChatRoom")
+  chatMessages     ChatMessages[]
 }
 
 model Token {
@@ -210,4 +213,32 @@ model Message {
 
   @@index([userId])
   @@index([streamId])
+}
+
+model ChatRoom {
+  id           Int            @id @default(autoincrement())
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  host         User           @relation(name: "HostChatRoom", fields: [hostId], references: [id], onDelete: Cascade)
+  hostId       Int
+  invited      User           @relation(name: "InvitedChatRoom", fields: [invitedId], references: [id], onDelete: Cascade)
+  invitedId    Int
+  chatMessages ChatMessages[]
+
+  @@index([hostId])
+  @@index([invitedId])
+}
+
+model ChatMessages {
+  id         Int      @id @default(autoincrement())
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId     Int
+  message    String   @db.MediumText
+  chatRoom   ChatRoom @relation(fields: [chatRoomId], references: [id], onDelete: Cascade)
+  chatRoomId Int
+
+  @@index([userId])
+  @@index([chatRoomId])
 }
