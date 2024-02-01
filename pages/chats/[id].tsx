@@ -1,30 +1,59 @@
 import Layout from "@components/layout";
 import Message from "@components/message";
 import useMutation from "@libs/client/useMutation";
-import { ChatRoom } from "@prisma/client";
+import useUser from "@libs/client/useUser";
+import { ChatMessages, ChatRoom, User } from "@prisma/client";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import useSWR from "swr";
 
+interface ChatRoomWithMessages extends ChatRoom {
+  chatMessages: ChatMessages[];
+  host: User;
+  invited: User;
+}
+
 interface ChatMessagesResponse {
   ok: boolean;
-  chatRoom: ChatRoom[];
+  chatRoom: ChatRoomWithMessages;
 }
 interface MessageForm {
   message: string;
 }
 
 const ChatDetail: NextPage = () => {
+  const user = useUser();
   const router = useRouter();
-  const { data: messageData } = useSWR<ChatMessagesResponse>(
+  const { data: messageData, mutate } = useSWR<ChatMessagesResponse>(
     router.query.id ? `/api/chats/${router.query.id}` : null
   );
-  const { register, handleSubmit } = useForm<MessageForm>();
+  const { register, handleSubmit, reset } = useForm<MessageForm>();
   const [sendMessage, { data, loading }] = useMutation(
     `/api/chats/${router.query.id}/messages`
   );
   const onValid = (form: MessageForm) => {
+    if (!messageData) return;
+    reset();
+    mutate(
+      (prev) =>
+        prev &&
+        ({
+          ...messageData,
+          chatRoom: {
+            ...messageData.chatRoom,
+            chatMessages: [
+              {
+                message: form,
+                createdAt: Date.now(),
+                userId: user?.id,
+              },
+              ...messageData.chatRoom.chatMessages,
+            ],
+          },
+        } as any),
+      false
+    );
     if (loading) return;
     sendMessage(form);
   };
@@ -33,9 +62,9 @@ const ChatDetail: NextPage = () => {
     <Layout canGoBack title="Steve">
       <div className="py-10 pb-16 px-4 space-y-4">
         <>
-          {messageData?.chatRoom?.chatMessages.map((message) => (
+          {/* {messageData?.chatRoom?.chatMessages.map((message) => (
             <Message key={message.createdAt} message={message.message} />
-          ))}
+          ))} */}
         </>
 
         <form
