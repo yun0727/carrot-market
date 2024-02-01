@@ -1,17 +1,50 @@
 import Layout from "@components/layout";
 import Message from "@components/message";
+import useMutation from "@libs/client/useMutation";
+import { ChatRoom } from "@prisma/client";
 import type { NextPage } from "next";
+import { useRouter } from "next/router";
+import { useForm } from "react-hook-form";
+import useSWR from "swr";
+
+interface ChatMessagesResponse {
+  ok: boolean;
+  chatRoom: ChatRoom[];
+}
+interface MessageForm {
+  message: string;
+}
 
 const ChatDetail: NextPage = () => {
+  const router = useRouter();
+  const { data: messageData } = useSWR<ChatMessagesResponse>(
+    router.query.id ? `/api/chats/${router.query.id}` : null
+  );
+  const { register, handleSubmit } = useForm<MessageForm>();
+  const [sendMessage, { data, loading }] = useMutation(
+    `/api/chats/${router.query.id}/messages`
+  );
+  const onValid = (form: MessageForm) => {
+    if (loading) return;
+    sendMessage(form);
+  };
+
   return (
     <Layout canGoBack title="Steve">
       <div className="py-10 pb-16 px-4 space-y-4">
-        <Message message="Hi how much are you selling them for?" />
-        <Message message="I want ￦20,000" reversed />
-        <Message message="미쳤어" />
-        <form className="fixed py-2 bg-white  bottom-0 inset-x-0">
+        <>
+          {messageData?.chatRoom?.chatMessages.map((message) => (
+            <Message key={message.createdAt} message={message.message} />
+          ))}
+        </>
+
+        <form
+          onSubmit={handleSubmit(onValid)}
+          className="fixed py-2 bg-white  bottom-0 inset-x-0"
+        >
           <div className="flex relative max-w-md items-center  w-full mx-auto">
             <input
+              {...register("message", { minLength: 1 })}
               type="text"
               className="shadow-sm rounded-full w-full border-gray-300 focus:ring-orange-500 focus:outline-none pr-12 focus:border-orange-500"
             />

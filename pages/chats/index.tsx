@@ -2,6 +2,8 @@ import Layout from "@components/layout";
 import { ChatRoom } from "@prisma/client";
 import { NextPage } from "next";
 import Link from "next/link";
+import { useRouter } from "next/router";
+import { use } from "react";
 import useSWR from "swr";
 
 interface ChatRoomsResponse {
@@ -10,6 +12,7 @@ interface ChatRoomsResponse {
 }
 
 const Chats: NextPage = () => {
+  const router = useRouter();
   const { data } = useSWR<ChatRoomsResponse>(`/api/chats`);
   return (
     <Layout hasTabBar title="채팅">
