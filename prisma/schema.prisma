@@ -34,8 +34,8 @@ model User {
   record           Record[]
   streams          Stream[]
   messages         Message[]
-  hostChatRooms    ChatRoom[]     @relation(name: "HostChatRoom")
-  invitedChatRooms ChatRoom[]     @relation(name: "InvitedChatRoom")
+  hostChatRooms    ChatRoom[]     @relation(name: "hostChatRoom")
+  invitedChatRooms ChatRoom[]     @relation(name: "invitedChatRoom")
   chatMessages     ChatMessages[]
 }
 
@@ -64,6 +64,7 @@ model Product {
   sales       Sale[]
   purchases   Purchase[]
   records     Record[]
+  chatRooms   ChatRoom[]
 
   @@index([userId])
 }
@@ -219,12 +220,15 @@ model ChatRoom {
   id           Int            @id @default(autoincrement())
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @updatedAt
-  host         User           @relation(name: "HostChatRoom", fields: [hostId], references: [id], onDelete: Cascade)
+  product      Product        @relation(fields: [productId], references: [id])
+  productId    Int
+  host         User           @relation(name: "hostChatRoom", fields: [hostId], references: [id], onDelete: Cascade)
   hostId       Int
-  invited      User           @relation(name: "InvitedChatRoom", fields: [invitedId], references: [id], onDelete: Cascade)
+  invited      User           @relation(name: "invitedChatRoom", fields: [invitedId], references: [id], onDelete: Cascade)
   invitedId    Int
   chatMessages ChatMessages[]
 
+  @@index([productId])
   @@index([hostId])
   @@index([invitedId])
 }

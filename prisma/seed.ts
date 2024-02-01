@@ -1,9 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 
-const client = new PrismaClient({
-  log: ['query', 'info', 'warn', 'error'],
-  errorFormat: 'pretty'
-});
+const client = new PrismaClient({log: ['query', 'info', 'warn', 'error']});
 
 async function main(){
   [...Array.from(Array(500).keys())].forEach(async(item)=>{

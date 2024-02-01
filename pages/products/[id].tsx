@@ -9,6 +9,7 @@ import useMutation from "@libs/client/useMutation";
 import { cls } from "@libs/client/utils";
 import useUser from "@libs/client/useUser";
 import Image from "next/image";
+import { useEffect } from "react";
 
 interface ProductWithUser extends Product {
   user: User;
@@ -19,11 +20,14 @@ interface ItemDetailResponse {
   relatedProducts: Product[];
   isLiked: boolean;
 }
-
+interface ChatRoomResponse {
+  ok: boolean;
+  chatRoomId: string;
+}
 const ItemDetail: NextPage = () => {
-  const { user, isLoading } = useUser();
+  // const { user, isLoading } = useUser();
   const router = useRouter();
-  const { mutate } = useSWRConfig();
+  // const { mutate } = useSWRConfig();
   const { data, mutate: boundMutate } = useSWR<ItemDetailResponse>(
     router.query.id ? `/api/products/${router.query.id}` : null
   );
@@ -34,6 +38,20 @@ const ItemDetail: NextPage = () => {
     // mutate("/api/users/me", (prev: any) =>({ok: !prev.ok}), false);
     toggleFav({});
   };
+  const [createChatRoom, { data: chatRoomData, loading }] =
+    useMutation<ChatRoomResponse>(
+      `/api/chats?productId=${data?.product.id}&invitedId=${data?.product.userId}`
+    );
+  const onTalkToSellerClick = () => {
+    if (loading) return;
+    createChatRoom({});
+    console.log(chatRoomData);
+  };
+  useEffect(() => {
+    if (chatRoomData && chatRoomData.ok) {
+      router.push(`/chats/${chatRoomData.chatRoomId}`);
+    }
+  }, [chatRoomData, router]);
   return (
     <Layout canGoBack>
       <div className="px-4 py-4">
@@ -43,6 +61,7 @@ const ItemDetail: NextPage = () => {
               src={`https://imagedelivery.net/eDyjyaqPYNWgEueo37Q8vA/${data?.product.image}/public`}
               className="object-cover bg-slate-300"
               layout="fill"
+              alt=""
             />
           </div>
           <div className=" flex cursor-pointer py-3 border-t border-b items-center space-x-3">
@@ -51,6 +70,7 @@ const ItemDetail: NextPage = () => {
               height={48}
               src={`https://imagedelivery.net/eDyjyaqPYNWgEueo37Q8vA/${data?.product?.user?.avatar}/avatar`}
               className="w-12 h-12 rounded-full bg-slate-300"
+              alt=""
             />
             <div>
               <p className="text-sm font-medium text-gray-700">
@@ -71,11 +91,15 @@ const ItemDetail: NextPage = () => {
               {data?.product?.name}
             </h1>
             <span className="text-2xl block mt-3 text-gray-900">
-              ${data?.product?.price}
+              ₩{data?.product?.price}
             </span>
             <p className="my-6 text-gray-700">{data?.product?.description}</p>
             <div className="flex items-center justify-between space-x-2">
-              <Button large text="Talk to seller" />
+              <Button
+                large
+                text="Talk to seller"
+                onclick={onTalkToSellerClick}
+              />
               <button
                 onClick={onFavClick}
                 className={cls(
