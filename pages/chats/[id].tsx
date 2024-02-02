@@ -5,6 +5,7 @@ import useUser from "@libs/client/useUser";
 import { ChatMessages, ChatRoom, User } from "@prisma/client";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import useSWR from "swr";
 
@@ -57,9 +58,43 @@ const ChatDetail: NextPage = () => {
     if (loading) return;
     sendMessage(form);
   };
+  const [isReserve, setIsReserve] = useState(false);
+  const onReserveClick = () => {
+    setIsReserve((prev) => !prev);
+  };
+  const onWriteReviewClick = () => {
+    router.push(
+      `/review?createdById=${messageData?.chatRoom.hostId}&createdForId=${messageData?.chatRoom?.invitedId}`
+    );
+  };
 
   return (
-    <Layout canGoBack title="Steve">
+    <Layout canGoBack title={messageData?.chatRoom.invited.name}>
+      <div className="border-y-[1px]">
+        {isReserve ? (
+          <div className="flex space-x-2">
+            <button
+              onClick={onReserveClick}
+              className="inline-block my-5 p-2 rounded-md bg-gray-500 text-white cursor-pointer text-sm"
+            >
+              예약취소
+            </button>
+            <button
+              onClick={onWriteReviewClick}
+              className="inline-block my-5 p-2 rounded-md bg-orange-500 hover:bg-orange-600 cursor-pointer text-sm"
+            >
+              리뷰쓰기
+            </button>
+          </div>
+        ) : (
+          <button
+            onClick={onReserveClick}
+            className="inline-block my-5 p-2 rounded-md bg-green-500 text-white cursor-pointer hover:bg-green-600 text-sm"
+          >
+            예약하기
+          </button>
+        )}
+      </div>
       <div className="py-10 px-4  space-y-4">
         {messageData?.chatRoom?.chatMessages.map((message) => (
           <Message

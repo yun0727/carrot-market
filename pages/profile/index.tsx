@@ -5,6 +5,7 @@ import { Review, User } from "@prisma/client";
 import useUser from "@libs/client/useUser";
 import useSWR from "swr";
 import { cls } from "@libs/client/utils";
+import Image from "next/image";
 
 interface ReviewWithUser extends Review {
   createdBy: User;
@@ -22,10 +23,22 @@ const Profile: NextPage = () => {
       <div className="px-4">
         <div className="flex items-center mt-4 space-x-3">
           {user?.avatar ? (
-            <img
-              src={`https://imagedelivery.net/eDyjyaqPYNWgEueo37Q8vA/${user?.avatar}/avatar`}
-              className="w-16 h-16 bg-slate-500 rounded-full"
-            />
+            // <img
+            //   src={`https://imagedelivery.net/eDyjyaqPYNWgEueo37Q8vA/${user?.avatar}/avatar`}
+            //   className="w-16 h-16 bg-slate-500 rounded-full"
+            // />
+            <div className="w-12 h-12 relative">
+              <Image
+                src={`https://imagedelivery.net/eDyjyaqPYNWgEueo37Q8vA/${user?.avatar}/avatar`}
+                alt=""
+                className="w-16 h-16 bg-slate-500 rounded-full"
+                fill={true}
+                sizes="(max-width: 768px) 100vw,
+                          (max-width: 1200px) 100vw,
+                          100vw"
+                priority={true}
+              />
+            </div>
           ) : (
             <div className="w-16 h-16 bg-slate-500 rounded-full" />
           )}
@@ -111,7 +124,22 @@ const Profile: NextPage = () => {
         {data?.reviews.map((review) => (
           <div key={review.id} className="mt-12">
             <div className="flex space-x-4 items-center">
-              <div className="w-12 h-12 rounded-full bg-slate-500" />
+              {review.createdBy.avatar ? (
+                <div className="relative w-10 h-10">
+                  <Image
+                    alt=""
+                    src={`https://imagedelivery.net/eDyjyaqPYNWgEueo37Q8vA/${review.createdBy.avatar}/public`}
+                    className="bg-slate-300 object-cover rounded-full"
+                    fill={true}
+                    sizes="(max-width: 768px) 100vw,
+                    (max-width: 1200px) 100vw,
+                    100vw"
+                    priority={true}
+                  />
+                </div>
+              ) : (
+                <div className="w-12 h-12 rounded-full bg-slate-500" />
+              )}
               <div>
                 <h4 className="text-sm font-bold text-gray-800">
                   {review.createdBy.name}
