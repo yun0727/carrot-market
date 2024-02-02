@@ -43,12 +43,12 @@ const ChatDetail: NextPage = () => {
           chatRoom: {
             ...messageData.chatRoom,
             chatMessages: [
+              ...messageData.chatRoom.chatMessages,
               {
-                message: form,
-                createdAt: Date.now(),
+                id: Date.now(),
+                message: form.message,
                 userId: user?.id,
               },
-              ...messageData.chatRoom.chatMessages,
             ],
           },
         } as any),
@@ -60,12 +60,21 @@ const ChatDetail: NextPage = () => {
 
   return (
     <Layout canGoBack title="Steve">
-      <div className="py-10 pb-16 px-4 space-y-4">
-        <>
-          {/* {messageData?.chatRoom?.chatMessages.map((message) => (
-            <Message key={message.createdAt} message={message.message} />
-          ))} */}
-        </>
+      <div className="py-10 px-4  space-y-4">
+        {messageData?.chatRoom?.chatMessages.map((message) => (
+          <Message
+            key={message.id}
+            message={message.message}
+            reversed={
+              message.userId === messageData.chatRoom.host.id ? true : false
+            }
+            avatarUrl={
+              message.userId === messageData.chatRoom.host.id
+                ? messageData.chatRoom.host.avatar
+                : messageData.chatRoom.invited.avatar
+            }
+          />
+        ))}
 
         <form
           onSubmit={handleSubmit(onValid)}
