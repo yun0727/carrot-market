@@ -1,4 +1,3 @@
-import { getIronSession } from "iron-session";
 import { NextFetchEvent, NextRequest, NextResponse, userAgent, } from "next/server";
 
 export const middleware = async(req: NextRequest, ev: NextFetchEvent)=>{
