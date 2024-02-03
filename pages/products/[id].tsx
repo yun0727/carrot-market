@@ -53,7 +53,7 @@ const ItemDetail: NextPage = () => {
     }
   }, [chatRoomData, router]);
   return (
-    <Layout canGoBack>
+    <Layout seoTitle="Product Detail" canGoBack>
       <div className="px-4 py-4">
         <div className="mb-8">
           <div className="relative pb-80">
