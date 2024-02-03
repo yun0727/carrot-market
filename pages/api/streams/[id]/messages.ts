@@ -17,7 +17,8 @@ async function handler (
       message: body.message,
       stream:{
         connect:{
-          id: +id.toString()
+          // id: +id.toString()
+          id: Number(id)
         }
       },
       user:{

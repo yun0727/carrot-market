@@ -33,8 +33,10 @@ if (req.method === "GET"){
   const {
     query: {latitude, longitude},
   }=req;
-  const parsedLatitude = parseFloat(latitude.toString())
-  const parsedLongitude = parseFloat(longitude.toString())
+  // const parsedLatitude = parseFloat(latitude.toString())
+  // const parsedLongitude = parseFloat(longitude.toString())
+  const parsedLatitude = parseFloat(latitude!.toString())
+  const parsedLongitude = parseFloat(longitude!.toString())
   const posts = await client.post.findMany({
     include:{
       user:{

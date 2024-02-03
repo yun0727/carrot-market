@@ -16,7 +16,7 @@
     "iron-session": "^6.0.5",
     "next": "^14.0.4",
     "nodemailer": "^6.9.8",
-    "react": "^18",
+    "react": "^18.2.0",
     "react-dom": "^18",
     "react-hook-form": "^7.48.2",
     "swr": "^2.2.4",

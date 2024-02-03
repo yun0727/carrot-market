@@ -21,6 +21,7 @@ export default function ProductList({ kind }: ProductListProps) {
     <>
       {data[kind]?.map((record) => (
         <Item
+          image=""
           id={record.product.id}
           key={record.id}
           title={record.product.name}
