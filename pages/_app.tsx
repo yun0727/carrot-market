@@ -3,6 +3,7 @@ import type { AppProps } from "next/app";
 import { SWRConfig } from "swr";
 
 export default function App({ Component, pageProps }: AppProps) {
+  console.log("APP IS RUNNING");
   return (
     <SWRConfig
       value={{
