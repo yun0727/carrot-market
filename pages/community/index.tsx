@@ -6,7 +6,6 @@ import type { NextPage } from "next";
 import Link from "next/link";
 import useSWR from "swr";
 import client from "@libs/server/client";
-import V1 from "twilio/lib/rest/wireless/V1";
 
 interface PostWithUser extends Post {
   user: User;
@@ -111,7 +110,6 @@ export async function getStaticProps() {
     props: {
       posts: JSON.parse(JSON.stringify(posts)),
     },
-    revalidate: 20,
   };
 }
 
