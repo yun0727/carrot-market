@@ -50,7 +50,7 @@ const WriteReview: NextPage = () => {
             required: true,
             pattern: /^[1-5]+$/,
             maxLength: 1,
-            valueAsNumber: true,
+            // valueAsNumber: true,
           })}
           label="Rating : 1~5"
         />

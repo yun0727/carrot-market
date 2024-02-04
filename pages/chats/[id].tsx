@@ -48,7 +48,8 @@ const ChatDetail: NextPage = () => {
               {
                 id: Date.now(),
                 message: form.message,
-                userId: user?.id,
+                // userId: user?.id,
+                userId: user?.user?.id,
               },
             ],
           },
